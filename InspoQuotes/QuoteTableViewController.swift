@@ -32,7 +32,7 @@ class QuoteTableViewController: UITableViewController {
         super.viewDidLoad()
     }
     
-    // MARK: - Table view data source
+    // MARK: - Tableview data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return quotesToShow.count + 1
     }
@@ -51,6 +51,19 @@ class QuoteTableViewController: UITableViewController {
         }
         
         return cell
+    }
+    
+    //MARK: - TableView delegate methods
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == quotesToShow.count {
+            buyPremiumQuotes()
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    //MARK: - In-App purchase methods
+    func buyPremiumQuotes() {
+        
     }
     
     @IBAction func restorePressed(_ sender: UIBarButtonItem) {
