@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import StoreKit
 
 class QuoteTableViewController: UITableViewController {
+    
+    let productID = "com.eunsol.InspoQuotes.PremiumQuotes"
     
     var quotesToShow = [
         "Our greatest glory is not in never falling, but in rising every time we fall. — Confucius",
@@ -63,7 +66,13 @@ class QuoteTableViewController: UITableViewController {
     
     //MARK: - In-App purchase methods
     func buyPremiumQuotes() {
-        
+        if SKPaymentQueue.canMakePayments() {
+            let paymentRequest = SKMutablePayment()
+            paymentRequest.productIdentifier = productID
+            SKPaymentQueue.default().add(paymentRequest)
+        } else {
+            print("User can't make payments.")
+        }
     }
     
     @IBAction func restorePressed(_ sender: UIBarButtonItem) {
