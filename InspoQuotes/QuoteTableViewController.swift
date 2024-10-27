@@ -9,7 +9,7 @@
 import UIKit
 import StoreKit
 
-class QuoteTableViewController: UITableViewController {
+class QuoteTableViewController: UITableViewController, SKPaymentTransactionObserver {
     
     let productID = "com.eunsol.InspoQuotes.PremiumQuotes"
     
@@ -33,6 +33,8 @@ class QuoteTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        SKPaymentQueue.default().add(self)
     }
     
     // MARK: - Tableview data source
@@ -72,6 +74,24 @@ class QuoteTableViewController: UITableViewController {
             SKPaymentQueue.default().add(paymentRequest)
         } else {
             print("User can't make payments.")
+        }
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        for transaction in transactions {
+            if transaction.transactionState == .purchased {
+                print("Transaction successful")
+                SKPaymentQueue.default().finishTransaction(transaction)
+            } else if transaction.transactionState == .failed {
+            
+                if #error == transaction.error {
+                    let errorDescription = #error.localizedDescription
+                    print("Transaction failed due to error: \(errorDescription)")
+                }
+                
+                SKPaymentQueue.default().finishTransaction(transaction)
+                
+            }
         }
     }
     
