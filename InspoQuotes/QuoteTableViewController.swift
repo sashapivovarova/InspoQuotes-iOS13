@@ -49,6 +49,8 @@ class QuoteTableViewController: UITableViewController, SKPaymentTransactionObser
         if indexPath.row < quotesToShow.count {
             cell.textLabel?.text = quotesToShow[indexPath.row]
             cell.textLabel?.numberOfLines = 0
+            cell.textLabel?.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            cell.accessoryType = .none
         } else {
             cell.textLabel?.text = "Get more quotes"
             cell.textLabel?.textColor = #colorLiteral(red: 0.0431372549, green: 0.3764705882, blue: 0.6901960784, alpha: 1)
@@ -80,19 +82,23 @@ class QuoteTableViewController: UITableViewController, SKPaymentTransactionObser
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         for transaction in transactions {
             if transaction.transactionState == .purchased {
-                print("Transaction successful")
+                showPremiumQuotes()
                 SKPaymentQueue.default().finishTransaction(transaction)
             } else if transaction.transactionState == .failed {
-            
-                if #error == transaction.error {
-                    let errorDescription = #error.localizedDescription
+                
+                if let error = transaction.error {
+                    let errorDescription = error.localizedDescription
                     print("Transaction failed due to error: \(errorDescription)")
                 }
                 
                 SKPaymentQueue.default().finishTransaction(transaction)
-                
             }
         }
+    }
+    
+    func showPremiumQuotes() {
+        quotesToShow.append(contentsOf: premiumQuotes)
+        tableView.reloadData()
     }
     
     @IBAction func restorePressed(_ sender: UIBarButtonItem) {
