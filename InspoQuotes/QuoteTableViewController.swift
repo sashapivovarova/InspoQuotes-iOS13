@@ -83,6 +83,7 @@ class QuoteTableViewController: UITableViewController, SKPaymentTransactionObser
         for transaction in transactions {
             if transaction.transactionState == .purchased {
                 showPremiumQuotes()
+                UserDefaults.standard.setValue(true, forKey: productID)
                 SKPaymentQueue.default().finishTransaction(transaction)
             } else if transaction.transactionState == .failed {
                 
