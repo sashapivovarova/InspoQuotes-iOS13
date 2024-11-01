@@ -100,6 +100,10 @@ class QuoteTableViewController: UITableViewController, SKPaymentTransactionObser
                 }
                 
                 SKPaymentQueue.default().finishTransaction(transaction)
+            } else if transaction.transactionState == .restored {
+                showPremiumQuotes()
+                print("Transaction restored")
+                SKPaymentQueue.default().finishTransaction(transaction)
             }
         }
     }
@@ -122,6 +126,6 @@ class QuoteTableViewController: UITableViewController, SKPaymentTransactionObser
     }
     
     @IBAction func restorePressed(_ sender: UIBarButtonItem) {
-        
+        SKPaymentQueue.default().restoreCompletedTransactions()
     }
 }
